@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#6d35db">
+<title>InstaSave Helper</title>
+<style>
+:root{color-scheme:light;--purple:#6d35db;--ink:#211936;--muted:#756d86;--line:#e7ddfa}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#fbf8ff,#f3edff);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;color:var(--ink)}
+header{padding:22px 20px;font-size:21px;font-weight:800}header span{color:#df3c91}
+main{max-width:760px;margin:auto;padding:18px 20px 48px}.pill{display:inline-block;padding:9px 15px;border-radius:22px;background:#eee4ff;color:#6030c4;font-weight:800;font-size:13px}
+h1{font-size:clamp(30px,7vw,46px);line-height:1.25;margin:18px 0;text-align:center} .intro{text-align:center;color:var(--muted);line-height:1.8;margin:0 auto 32px}
+.panel{background:white;border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 12px 34px #3c17620b}
+label{display:block;font-weight:750;margin-bottom:12px}input{width:100%;padding:17px 16px;border:1px solid #d9c8f8;border-radius:17px;font:inherit;font-size:16px;outline-color:var(--purple)}
+button{width:100%;padding:15px;border:0;border-radius:16px;font:inherit;font-weight:800;cursor:pointer;margin-top:12px}.paste{background:#efe7fc;color:#5830a7}.check{background:var(--purple);color:white}
+#message{margin-top:16px;padding:14px;border-radius:14px;line-height:1.6;display:none;overflow-wrap:anywhere}.note{color:var(--muted);font-size:14px;line-height:1.8;margin-top:22px}
+section.info{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px}section.info h2{font-size:22px}li{margin:10px 0;line-height:1.7}footer{text-align:center;color:var(--muted);padding:25px;font-size:13px}
+</style>
+</head>
+<body>
+<header>⬇ InstaSave <span>Helper</span></header>
+<main>
+<div style="text-align:center"><span class="pill">SIMPLE • MOBILE FRIENDLY</span></div>
+<h1>ভিডিও লিংক<br>এখানে পেস্ট করুন</h1>
+<p class="intro">লিংক যাচাই করুন এবং অনুমোদিত ভিডিও ডাউনলোডের জন্য পরের ধাপ দেখুন।</p>
+<div class="panel">
+<label for="url">Instagram ভিডিওর লিংক</label>
+<input id="url" type="url" inputmode="url" placeholder="https://www.instagram.com/reel/..." autocomplete="url">
+<button class="paste" id="paste" type="button">Paste</button>
+<button class="check" id="check" type="button">লিংক যাচাই করুন</button>
+<div id="message" role="status" aria-live="polite"></div>
+<p class="note">এই সংস্করণে ভিডিও ডাউনলোডের backend/API যুক্ত নেই। Instagram লিংক যাচাই করা যায়, কিন্তু এই পেজ নিজে থেকে ভিডিও ফাইল ডাউনলোড করে না। শুধু নিজের বা ডাউনলোডের অনুমতি থাকা কনটেন্ট ব্যবহার করুন।</p>
+</div>
+<section class="info"><h2>কীভাবে ব্যবহার করবেন</h2><ol><li>আপনার অনুমোদিত Instagram পোস্ট বা Reel-এর লিংক কপি করুন।</li><li>উপরের বক্সে লিংক পেস্ট করুন।</li><li>“লিংক যাচাই করুন” চাপুন।</li></ol><p>বাস্তব ভিডিও ডাউনলোড চালু করতে আলাদা, বৈধ ভিডিও-সোর্স ও backend/API কনফিগার করতে হবে।</p></section>
+</main>
+<footer>InstaSave Helper • ব্যবহার করুন দায়িত্বের সঙ্গে</footer>
+<script>
+const urlInput=document.getElementById('url'), msg=document.getElementById('message');
+document.getElementById('paste').addEventListener('click',async()=>{try{urlInput.value=await navigator.clipboard.readText();msg.style.display='block';msg.style.background='#edf9f0';msg.style.color='#176534';msg.textContent='লিংক পেস্ট হয়েছে। এবার যাচাই করুন।'}catch(e){msg.style.display='block';msg.style.background='#fff5df';msg.style.color='#805700';msg.textContent='ফোনের ক্লিপবোর্ড অনুমতি দেয়নি। বক্সে চেপে ধরে Paste নির্বাচন করুন।'}});
+document.getElementById('check').addEventListener('click',()=>{let value=urlInput.value.trim();msg.style.display='block';if(!value){msg.style.background='#fff0f2';msg.style.color='#a61937';msg.textContent='আগে একটি Instagram লিংক দিন।';return;}try{let u=new URL(value);if((u.hostname==='instagram.com'||u.hostname.endsWith('.instagram.com'))&&u.protocol==='https:'){msg.style.background='#edf9f0';msg.style.color='#176534';msg.textContent='লিংকটি Instagram ডোমেইনের। এই starter page-এ ভিডিও আনার API/backend এখনও যুক্ত নেই, তাই ডাউনলোড শুরু হয়নি। পরের ধাপে অনুমোদিত ভিডিও-সোর্স যুক্ত করতে হবে.';}else throw new Error();}catch(e){msg.style.background='#fff0f2';msg.style.color='#a61937';msg.textContent='এটি সঠিক Instagram URL নয়। আবার পরীক্ষা করুন।';}});
+</script>
+</body>
+</html>
